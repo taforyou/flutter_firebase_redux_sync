@@ -10,8 +10,8 @@ import 'state.dart';
 // -- Data Type --
 
 class Post {
-  final int userId;
   final int id;
+  final int userId;
   final String title;
   final String body;
 
@@ -35,40 +35,41 @@ class SearchAction {
   SearchAction(this.query);
 }
 
-class SetSearchDataAction {
-  final String data;
+class SetPostsAction {
+  final List<Post> data;
 
-  SetSearchDataAction(this.data);
+  SetPostsAction(this.data);
 }
 
 // -- Reducer --
 
-final searchReducer = combineReducers<String>([
-  new TypedReducer<String, SearchAction>(_setSearchReducer),
-  new TypedReducer<String, SetSearchDataAction>(_setSearchDataReducer)
-]);
+final queryReducer = new TypedReducer<String, SearchAction>(_setSearchReducer);
+final postsReducer =
+    new TypedReducer<List<Post>, SetPostsAction>(_setPostsReducer);
 
-String _setSearchReducer(String oldText, SearchAction action) {
+String _setSearchReducer(state, SearchAction action) {
   return action.query;
 }
 
-String _setSearchDataReducer(String response, SetSearchDataAction action) {
-  // print("Data is ${action.data}");
+List<Post> _setPostsReducer(List<Post> response, SetPostsAction action) {
+  print("First Title is ${action.data[0].title}");
 
   return action.data;
 }
 
 // -- Helper --
 
-Future<Post> fetchPost(EpicStore<AppState> _store) async {
-  final url = 'https://jsonplaceholder.typicode.com/posts/1';
+Future<List<Post>> fetchPost() async {
+  final url = 'https://5b9a3ca9d203ad0014619c71.mockapi.io/posts';
   final response = await http.get(url);
 
   if (response.statusCode != 200) {
     throw Exception('Failed to load post');
   }
 
-  return Post.fromJson(json.decode(response.body));
+  List list = json.decode(response.body);
+
+  return list.map((p) => Post.fromJson(p)).toList();
 }
 
 // -- Epic --
@@ -81,6 +82,6 @@ Stream<dynamic> searchEpic(Stream<dynamic> actions, EpicStore<AppState> store) {
 
   return actions
       .where((action) => action is SearchAction)
-      .asyncMap((action) => fetchPost(store))
-      .map((data) => new SetSearchDataAction(data.body));
+      .asyncMap((action) => fetchPost())
+      .map((data) => new SetPostsAction(data));
 }
