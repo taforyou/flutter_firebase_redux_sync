@@ -28,6 +28,30 @@ class MyApp extends StatelessWidget {
   }
 }
 
+class PostList extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return StoreConnector<AppState, List<Post>>(
+      converter: (store) => store.state.posts,
+      builder: (context, list) {
+        if (list.length > 0) {
+          return Flexible(
+            child: ListView.builder(
+                itemCount: list.length,
+                itemBuilder: (context, index) {
+                  final post = list[index];
+
+                  return ListTile(
+                      title: Text(post.title), subtitle: Text(post.body));
+                }),
+          );
+        }
+        return Text("Press the button first");
+      },
+    );
+  }
+}
+
 class MyHomePage extends StatelessWidget {
   final String title;
 
@@ -49,6 +73,7 @@ class MyHomePage extends StatelessWidget {
             child: new Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
+                PostList(),
                 new Text('You have pushed the button this many times:'),
                 new Text(
                   '${store.state.counter}',
@@ -62,10 +87,9 @@ class MyHomePage extends StatelessWidget {
                   color: Colors.red,
                   padding: const EdgeInsets.all(8.0),
                   child: new Text(
-                    "SearchAction",
+                    "Search Posts",
                   ),
                 ),
-                new Text('${store.state.query}'),
               ],
             ),
           ),

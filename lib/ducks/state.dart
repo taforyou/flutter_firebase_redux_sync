@@ -8,8 +8,10 @@ import 'counter.dart';
 class AppState {
   final int counter;
   final String query;
+  final List<Post> posts;
 
-  AppState({this.counter = 0, this.query = 'init query'});
+  AppState(
+      {this.counter = 0, this.query = 'init query', this.posts = const []});
 
   AppState copyWith({int counter}) =>
       new AppState(counter: counter ?? this.counter);
@@ -19,9 +21,9 @@ class AppState {
 
 AppState appStateReducer(AppState state, dynamic action) {
   return new AppState(
-    counter: counterReducer(state.counter, action),
-    query: searchReducer(state.query, action),
-  );
+      counter: counterReducer(state.counter, action),
+      query: queryReducer(state.query, action),
+      posts: postsReducer(state.posts, action));
 }
 
 // - Root Epic -
