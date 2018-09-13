@@ -1,4 +1,4 @@
-package com.shiftstudio.firebase_redux_sync
+package com.example.babynames
 
 import android.os.Bundle
 

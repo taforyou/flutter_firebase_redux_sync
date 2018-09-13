@@ -1,8 +1,19 @@
 class IncrementCounterAction {}
 
+class TestCounterAction {}
+
+class RequestSearchDataEventsAction {
+  final String testFetch;
+
+  RequestSearchDataEventsAction(this.testFetch);
+}
+
 class CounterDataPushedAction {}
 
-class RequestCounterDataEventsAction {}
+class RequestCounterDataEventsAction {
+  // @override
+  // String toString() => 'RequestCounterDataEventsAction{test:}';
+}
 
 class CancelCounterDataEventsAction {}
 

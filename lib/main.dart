@@ -42,6 +42,8 @@ class MyHomePage extends StatelessWidget {
       onInit: (store) => store.dispatch(new RequestCounterDataEventsAction()),
       onDispose: (store) => store.dispatch(new CancelCounterDataEventsAction()),
       builder: (context, Store<AppState> store) {
+        //print(Theme.of(context).toString());
+        //Rprint(store.toString());
         return new Scaffold(
           appBar: new AppBar(
             title: new Text(title),
@@ -55,6 +57,18 @@ class MyHomePage extends StatelessWidget {
                   '${store.state.counter}',
                   style: Theme.of(context).textTheme.display1,
                 ),
+                new RaisedButton(
+                    onPressed: () {
+                      store.dispatch(new RequestSearchDataEventsAction('test 112233'));
+                    },
+                    textColor: Colors.white,
+                    color: Colors.red,
+                    padding: const EdgeInsets.all(8.0),
+                    child: new Text(
+                      "RequestSearchDataEventsAction",
+                    ),
+                  ),
+                new Text('${store.state.testFetch}'),
               ],
             ),
           ),
