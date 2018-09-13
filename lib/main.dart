@@ -1,20 +1,17 @@
-import 'package:firebase_redux_sync/redux/actions.dart';
-import 'package:firebase_redux_sync/redux/app_state.dart';
-import 'package:firebase_redux_sync/redux/app_state_reducer.dart';
-import 'package:firebase_redux_sync/redux/middleware.dart';
 import 'package:flutter/material.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux_epics/redux_epics.dart';
 
+import 'ducks/state.dart';
+import 'ducks/search.dart';
+import 'ducks/counter.dart';
+
 void main() => runApp(new MyApp());
 
 class MyApp extends StatelessWidget {
-  final store = new Store<AppState>(
-    appStateReducer,
-    initialState: new AppState(),
-    middleware: [new EpicMiddleware(allEpics)]
-  );
+  final store = new Store<AppState>(appStateReducer,
+      initialState: new AppState(), middleware: [new EpicMiddleware(allEpics)]);
 
   @override
   Widget build(BuildContext context) {
@@ -58,17 +55,17 @@ class MyHomePage extends StatelessWidget {
                   style: Theme.of(context).textTheme.display1,
                 ),
                 new RaisedButton(
-                    onPressed: () {
-                      store.dispatch(new RequestSearchDataEventsAction('test 112233'));
-                    },
-                    textColor: Colors.white,
-                    color: Colors.red,
-                    padding: const EdgeInsets.all(8.0),
-                    child: new Text(
-                      "RequestSearchDataEventsAction",
-                    ),
+                  onPressed: () {
+                    store.dispatch(new SearchAction('test 112233'));
+                  },
+                  textColor: Colors.white,
+                  color: Colors.red,
+                  padding: const EdgeInsets.all(8.0),
+                  child: new Text(
+                    "SearchAction",
                   ),
-                new Text('${store.state.testFetch}'),
+                ),
+                new Text('${store.state.query}'),
               ],
             ),
           ),
